@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Writing — Opeyemi Babarinde</title>
+<meta name="description" content="Articles on payments systems, backend engineering and markets.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Writing — Opeyemi Babarinde">
+<meta property="og:description" content="Articles on payments systems, backend engineering and markets.">
+<meta property="og:site_name" content="Opeyemi Babarinde">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2316191A'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='17' fill='%23F3F3F0' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E">
+<script>
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("theme"); } catch (e) {}
+    if (t !== "light" && t !== "dark") {
+      t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+    }
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600&family=Inter+Tight:wght@400;500&family=Newsreader:opsz,wght@6..72,400&display=swap" rel="stylesheet">
+<style>
+/* ---------------------------------------------------------------
+   Opeyemi "Bishop" Babarinde — personal site
+   --------------------------------------------------------------- */
+
+:root {
+  --paper:   #F3F3F0;
+  --raised:  #FFFFFF;
+  --ink:     #16191A;
+  --soft:    #6E7473;
+  --accent:  #2B45F2;
+  --rule:    #DDDED9;
+  --inv-text:#ECEDE9;
+  --inv-soft:#A6ACA9;
+  --shadow:  0 1px 2px rgba(0,0,0,.04);
+}
+
+html[data-theme="dark"] {
+  --paper:   #0F1211;
+  --raised:  #171B1A;
+  --ink:     #ECEDE9;
+  --soft:    #8B928E;
+  --accent:  #8496FF;
+  --rule:    #252A28;
+  --inv-text:#0F1211;
+  --inv-soft:#4A514E;
+  --shadow:  none;
+}
+
+:root {
+  --measure: 64ch;
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+  --maxw: 60rem;
+  --display: "Bricolage Grotesque", system-ui, sans-serif;
+  --ui: "Inter Tight", system-ui, -apple-system, sans-serif;
+  --read: "Newsreader", Georgia, serif;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ui);
+  font-size: 17px;
+  line-height: 1.55;
+  transition: background-color .25s var(--ease), color .25s var(--ease);
+}
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
+
+a { color: var(--ink); text-underline-offset: 3px; }
+a:hover { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 2px; }
+
+.skip { position: absolute; left: -9999px; }
+.skip:focus {
+  left: var(--gutter); top: .5rem; z-index: 20;
+  background: var(--ink); color: var(--paper); padding: .5rem .9rem;
+}
+
+/* ---------- header ---------- */
+
+.site-head {
+  position: sticky; top: 0; z-index: 10;
+  padding: 1.1rem 0;
+  background: color-mix(in srgb, var(--paper) 85%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s var(--ease);
+}
+.site-head.stuck { border-bottom-color: var(--rule); }
+
+.site-head .wrap {
+  display: flex; flex-wrap: wrap; gap: .6rem 1.5rem;
+  align-items: center; justify-content: space-between;
+}
+
+.mark {
+  font-family: var(--display); font-size: .98rem; font-weight: 600;
+  letter-spacing: -.02em; text-decoration: none;
+}
+
+.head-right { display: flex; align-items: center; gap: 1.35rem; }
+
+nav ul { display: flex; flex-wrap: wrap; gap: 1.35rem; list-style: none; margin: 0; padding: 0; font-size: .92rem; }
+nav a { color: var(--soft); text-decoration: none; position: relative; padding-bottom: 2px; }
+nav a::after {
+  content: ""; position: absolute; left: 0; bottom: 0;
+  width: 100%; height: 1px; background: currentColor;
+  transform: scaleX(0); transform-origin: right;
+  transition: transform .28s var(--ease);
+}
+nav a:hover { color: var(--ink); }
+nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+nav a[aria-current="page"] { color: var(--ink); }
+nav a[aria-current="page"]::after { transform: scaleX(1); }
+
+.theme-toggle {
+  display: grid; place-items: center;
+  width: 34px; height: 34px; padding: 0;
+  background: none; border: 1px solid var(--rule); border-radius: 50%;
+  color: var(--soft); cursor: pointer;
+  transition: color .2s var(--ease), border-color .2s var(--ease), transform .3s var(--ease);
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink); transform: rotate(25deg); }
+.theme-toggle svg { width: 16px; height: 16px; display: block; }
+html[data-theme="dark"] .icon-sun { display: block; }
+html[data-theme="dark"] .icon-moon { display: none; }
+.icon-sun { display: none; }
+.icon-moon { display: block; }
+
+main { padding-bottom: 5rem; }
+
+/* ---------- hero ---------- */
+
+.hero { padding: clamp(4rem, 16vh, 10rem) 0 clamp(3.5rem, 10vh, 6rem); }
+
+.eyebrow { font-size: .85rem; color: var(--soft); margin: 0 0 1.5rem; }
+
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(2.8rem, 10.5vw, 6.4rem);
+  font-weight: 600; letter-spacing: -.045em; line-height: .94; margin: 0;
+}
+
+.hero .sub {
+  margin: 1.75rem 0 0; max-width: 44ch;
+  font-size: clamp(1.05rem, 2.3vw, 1.25rem); color: var(--soft);
+}
+
+.hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2.5rem; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .92rem; text-decoration: none;
+  padding: .6rem 1.2rem; border-radius: 999px;
+  border: 1px solid var(--ink);
+  transition: background-color .22s var(--ease), color .22s var(--ease), transform .22s var(--ease);
+}
+.btn.solid { background: var(--ink); color: var(--paper); }
+.btn.solid:hover { color: var(--paper); transform: translateY(-2px); }
+.btn.ghost { color: var(--ink); border-color: var(--rule); }
+.btn.ghost:hover { border-color: var(--ink); color: var(--ink); transform: translateY(-2px); }
+
+.status { margin: 2.25rem 0 0; font-size: .88rem; color: var(--soft); display: inline-flex; align-items: center; gap: .55rem; }
+.status::before {
+  content: ""; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 0 var(--accent);
+  animation: pulse 2.6s infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+  70%  { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* ---------- sections ---------- */
+
+.section { padding: clamp(3.5rem, 9vh, 6rem) 0 0; }
+
+.section-head {
+  display: flex; flex-wrap: wrap; gap: .5rem 1.5rem;
+  align-items: baseline; justify-content: space-between;
+  border-top: 1px solid var(--ink); padding-top: 1.1rem; margin-bottom: 2.25rem;
+}
+.section-num { font-size: .82rem; color: var(--soft); margin: 0 0 .9rem; width: 100%; }
+.section-head h2 {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(1.7rem, 5vw, 2.6rem); letter-spacing: -.035em; margin: 0;
+}
+.section-head .more { font-size: .9rem; color: var(--soft); }
+
+.page-title {
+  font-family: var(--display); padding: clamp(3rem, 9vh, 5rem) 0 0;
+  font-size: clamp(2.1rem, 7vw, 3.4rem); font-weight: 600;
+  letter-spacing: -.04em; line-height: 1.02; margin: 0;
+}
+.page-intro { max-width: var(--measure); margin: 1.25rem 0 3rem; color: var(--soft); }
+
+h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: -.025em; line-height: 1.2; margin: 0; }
+p { margin: 0 0 1rem; }
+
+/* ---------- project cards ---------- */
+
+.cards { display: grid; gap: 1rem; }
+
+.card {
+  position: relative; display: block; text-decoration: none; color: inherit;
+  background: var(--raised); border: 1px solid var(--rule); border-radius: 6px;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform .3s var(--ease), border-color .3s var(--ease);
+}
+.card::before {
+  content: ""; position: absolute; inset: 0 auto 0 0; width: 2px;
+  background: var(--accent); transform: scaleY(0); transform-origin: bottom;
+  transition: transform .35s var(--ease);
+}
+.card:hover { transform: translateY(-3px); border-color: var(--ink); }
+.card:hover::before, .card:focus-visible::before { transform: scaleY(1); transform-origin: top; }
+
+.card .meta { font-size: .82rem; color: var(--soft); margin: 0 0 .75rem; display: flex; flex-wrap: wrap; gap: .3rem 1rem; }
+.card h3 { font-size: clamp(1.3rem, 3.2vw, 1.7rem); margin: 0 0 .7rem; }
+.card p { color: var(--soft); max-width: var(--measure); margin: 0; }
+.card .tags { display: flex; flex-wrap: wrap; gap: .4rem .5rem; margin-top: 1.1rem; }
+.card .tag {
+  font-size: .76rem; color: var(--soft);
+  border: 1px solid var(--rule); border-radius: 999px; padding: .12rem .6rem;
+}
+
+/* ---------- link rows (writing) ---------- */
+
+.rows { border-top: 1px solid var(--rule); }
+
+.row {
+  display: block; text-decoration: none; color: inherit;
+  border-bottom: 1px solid var(--rule);
+  padding: 1.4rem var(--gutter);
+  margin: 0 calc(var(--gutter) * -1);
+  transition: background-color .2s var(--ease), color .2s var(--ease), padding-left .25s var(--ease);
+}
+.row:hover, .row:focus-visible {
+  background: var(--ink); color: var(--inv-text);
+  padding-left: calc(var(--gutter) + .6rem);
+}
+.row:hover .row-meta, .row:focus-visible .row-meta { color: var(--inv-soft); }
+.row:hover .row-desc, .row:focus-visible .row-desc { color: var(--inv-text); }
+
+.row-meta { font-size: .82rem; color: var(--soft); margin: 0 0 .45rem; display: flex; flex-wrap: wrap; gap: .3rem 1rem; }
+.row h3 { font-size: clamp(1.1rem, 2.7vw, 1.4rem); margin: 0; }
+.row-desc { margin: .45rem 0 0; color: var(--soft); max-width: var(--measure); font-size: .96rem; }
+
+.empty { color: var(--soft); border: 1px dashed var(--rule); border-radius: 6px; padding: 2rem; text-align: center; }
+
+/* ---------- timeline ---------- */
+
+.timeline { border-top: 1px solid var(--ink); margin-top: 1rem; }
+.tl-row {
+  display: grid; grid-template-columns: 10rem 1fr; gap: 0 2rem;
+  padding: 1.6rem 0; border-bottom: 1px solid var(--rule);
+  transition: border-color .2s var(--ease);
+}
+.tl-row:hover { border-bottom-color: var(--ink); }
+.tl-row .when { font-size: .84rem; color: var(--soft); padding-top: .2rem; }
+.tl-row h3 { font-size: 1.12rem; margin-bottom: .3rem; }
+.tl-row p { margin: 0; color: var(--soft); max-width: var(--measure); font-size: .96rem; }
+
+/* ---------- prose ---------- */
+
+.prose { max-width: var(--measure); font-family: var(--read); font-size: 1.12rem; line-height: 1.7; }
+.prose h2 { font-size: 1.2rem; margin: 2.5rem 0 .7rem; }
+
+/* ---------- contact ---------- */
+
+.contact { padding: clamp(4rem, 11vh, 7rem) 0 0; }
+.contact h2 {
+  font-family: var(--display); font-size: clamp(1.9rem, 6vw, 3rem);
+  letter-spacing: -.04em; margin: 0 0 1rem;
+}
+.contact p { color: var(--soft); max-width: var(--measure); }
+
+/* ---------- footer ---------- */
+
+.site-foot { border-top: 1px solid var(--rule); padding: 2rem 0 3.5rem; font-size: .9rem; margin-top: 4rem; }
+.site-foot .wrap { display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between; }
+.site-foot ul { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; list-style: none; margin: 0; padding: 0; }
+.site-foot a { color: var(--soft); text-decoration: none; }
+.site-foot a:hover { color: var(--accent); }
+.name-foot { color: var(--soft); }
+
+/* ---------- reveal on scroll ---------- */
+
+.reveal { opacity: 0; transform: translateY(14px); }
+.reveal.in { opacity: 1; transform: none; transition: opacity .6s var(--ease), transform .6s var(--ease); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+@media (max-width: 40rem) {
+  .tl-row { grid-template-columns: 1fr; gap: .3rem; }
+  .tl-row .when { padding-top: 0; }
+}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head" id="site-head">
+  <div class="wrap">
+    <a class="mark" href="index.html">Opeyemi Babarinde</a>
+    <div class="head-right">
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="writing.html" aria-current="page">Writing</a></li>
+          <li><a href="timeline.html">Timeline</a></li>
+          <li><a href="cv.pdf" target="_blank" rel="noopener">CV</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch between light and dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <h1 class="page-title reveal">Writing.</h1>
+    <p class="page-intro reveal">Payments systems, backend engineering, and the places where the software and the numbers have to agree. Every link opens where it was published.</p>
+
+    <!-- =========================================================
+         ADD AN ARTICLE: copy one <a class="row reveal"> block,
+         change the href, the source, the date and the text.
+         Newest first. Works with Substack, Medium, a Google Doc
+         or anything else with a URL. Delete the placeholders.
+         ========================================================= -->
+    <div class="rows">
+
+      <a class="row reveal" href="https://substack.com" target="_blank" rel="noopener">
+        <p class="row-meta"><span>Substack</span><span>Placeholder</span></p>
+        <h3>Escrow is a state machine, and the edges are the product</h3>
+        <p class="row-desc">Why the hard part of holding someone else&rsquo;s money is agreeing on what state it is in when four systems disagree.</p>
+      </a>
+
+      <a class="row reveal" href="https://medium.com" target="_blank" rel="noopener">
+        <p class="row-meta"><span>Medium</span><span>Placeholder</span></p>
+        <h3>What actually breaks in merchant API integrations</h3>
+        <p class="row-desc">Webhooks that arrive twice, late, or never &mdash; a payments API seen from the merchant&rsquo;s seat.</p>
+      </a>
+
+      <a class="row reveal" href="https://docs.google.com" target="_blank" rel="noopener">
+        <p class="row-meta"><span>Google Doc</span><span>Placeholder</span></p>
+        <h3>Reconciliation is an engineering problem</h3>
+        <p class="row-desc">A control nobody can run twice and get the same answer from is not a control.</p>
+      </a>
+
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span class="name-foot">Opeyemi Babarinde &mdash; Lagos, Nigeria</span>
+    <ul>
+      <li><a href="mailto:opeyemi.c.babarinde@gmail.com">Email</a></li>
+      <li><a href="https://github.com/Bishopxxx" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/opeyemi-babarinde-4211301a7/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="cv.pdf" target="_blank" rel="noopener">CV</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+  // Theme toggle
+  (function () {
+    var btn = document.getElementById("theme-toggle");
+    var root = document.documentElement;
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("theme", next); } catch (e) {}
+    });
+  })();
+
+  // Hairline under the header once you scroll
+  (function () {
+    var head = document.getElementById("site-head");
+    if (!head) return;
+    var onScroll = function () { head.classList.toggle("stuck", window.scrollY > 8); };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  })();
+
+  // Reveal on scroll
+  (function () {
+    var items = document.querySelectorAll(".reveal");
+    if (!items.length) return;
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !("IntersectionObserver" in window)) {
+      items.forEach(function (el) { el.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    items.forEach(function (el, i) {
+      el.style.transitionDelay = Math.min(i % 4, 3) * 60 + "ms";
+      io.observe(el);
+    });
+  })();
+</script>
+
+</body>
+</html>
